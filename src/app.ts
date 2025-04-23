@@ -1,0 +1,28 @@
+import { MESSAGES } from './config/constants';
+import { encryptionRoutes } from './routes';
+import { expressInstance } from './server';
+import { debugConsoles } from './utils/debugConsoles';
+import { logger } from './utils/logger';
+import * as kilt from '@kiltprotocol/sdk-js';
+
+export async function StartServices() {
+  let kiltApi: any;
+
+  try {
+    // kiltApi = await kilt.connect(process.env.SERVER_URL || '');
+    debugConsoles();
+    expressInstance.listen(process.env.PORT || 3000, () => {
+      console.log(
+        `Server is running on http://localhost:${process.env.PORT || 3000}`,
+      );
+    });
+
+    console.log('hello, connected');
+  } catch (err: any) {
+    logger.error(err.message);
+  } finally {
+    // await kiltApi.disconnect();
+  }
+
+  console.log('lol');
+}
