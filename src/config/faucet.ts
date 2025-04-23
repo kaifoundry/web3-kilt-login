@@ -1,7 +1,7 @@
 import * as Kilt from '@kiltprotocol/sdk-js';
 import type { SignerInterface, KiltAddress } from '@kiltprotocol/types';
 
-const faucet = {
+export const faucetAccount = {
   publicKey: new Uint8Array([
     238, 93, 102, 137, 215, 142, 38, 187, 91, 53, 176, 68, 23, 64, 160, 101,
     199, 189, 142, 253, 209, 193, 84, 34, 7, 92, 63, 43, 32, 33, 181, 210,
@@ -12,11 +12,11 @@ const faucet = {
   ]),
 };
 
-export async function getSubmitterAccount() {
-  const [submitter] = (await Kilt.getSignersForKeypair({
-    keypair: faucet,
-    type: 'Ed25519',
-  })) as Array<SignerInterface<'Ed25519', KiltAddress>>;
+// export async function getSubmitterAccount(): Promise<Array<SignerInterface<'Ed25519', KiltAddress>>>{
+//   const [submitter] = (await Kilt.getSignersForKeypair({
+//     keypair: faucet,
+//     type: 'Ed25519',
+//   })) as Array<SignerInterface<'Ed25519', KiltAddress>>;
 
-  return submitter;
-}
+//   return submitter;
+// }

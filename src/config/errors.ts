@@ -7,3 +7,23 @@
 //   INTERNAL_ERROR: { code: 500, message: 'Internal server error' },
 //   BAD_REQUEST: { code: 400, message: 'Bad request' },
 // };
+
+export class DecryptionError extends Error {
+  constructor(
+    public code: number,
+    message: string,
+  ) {
+    super(message);
+    this.name = 'DecryptionError';
+  }
+}
+
+export class ValidationError extends Error {
+  constructor(
+    public code: number,
+    message: string,
+  ) {
+    super(message);
+    this.name = 'ValidationError';
+  }
+}

@@ -1,6 +1,9 @@
 import { Request, Response } from 'express';
 import { logger } from '../../utils/logger';
-import { EncryptionHandler } from '../../services/EncryptionHandler';
+import {
+  DecryptionResults,
+  EncryptionHandler,
+} from '../../services/EncryptionHandler';
 import {
   ENCRPYTION_ALGORITHM,
   ENCRYPTED_ENDPOINTS,
@@ -12,12 +15,14 @@ export async function encryptionController(req: Request, res: Response) {
   const urlWithoutSpecialChar: string = req.url.slice(1);
 
   try {
-    const decryptedEndpoint: string = new EncryptionHandler({
+    const decryptedEndpoint: DecryptionResults = new EncryptionHandler({
       algorithm: ENCRPYTION_ALGORITHM.AES_256,
       secretKey: ENCRYPTION_SECRET.URL,
     }).decrypt(urlWithoutSpecialChar);
 
-    switch (decryptedEndpoint) {
+    // throw error is encrpyion fails
+
+    switch (decryptedEndpoint.data) {
       // match endpoints
       case ENCRYPTED_ENDPOINTS.TRANSHEX: {
         submitDidTransaction({ request: req, response: res });

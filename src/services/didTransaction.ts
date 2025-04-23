@@ -3,7 +3,14 @@ import { DidTransaction } from '../types/didTransaction';
 import { logger } from '../utils/logger';
 import * as Kilt from '@kiltprotocol/sdk-js';
 
-export async function DidTransactionHandler(transaction: DidTransaction) {
+interface TransactionResponse {
+  success: boolean;
+  error?: string | null;
+}
+
+export async function DidTransactionHandler(
+  transaction: DidTransaction,
+): Promise<TransactionResponse> {
   try {
     const api = Kilt.ConfigService.get('api');
 
@@ -12,10 +19,9 @@ export async function DidTransactionHandler(transaction: DidTransaction) {
       transaction.submitter,
     );
 
-    console.log('results is ', result.isCompleted);
-    console.log('results is ', result.toHuman());
+    return { success: result.isCompleted, error: null };
   } catch (err: any) {
     logger.error(err.message);
-    throw err;
+    return { success: false, error: err.message };
   }
 }

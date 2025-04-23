@@ -1,9 +1,15 @@
 import crypto from 'crypto';
 import { IV_LENGTH } from '../config/constants';
+import { logger } from '../utils/logger';
 
 export interface EncryptionArgs {
   algorithm: string;
   secretKey: string;
+}
+
+export interface DecryptionResults {
+  success: boolean;
+  data?: string;
 }
 
 export class EncryptionHandler {
@@ -30,17 +36,24 @@ export class EncryptionHandler {
     return encodeURIComponent(encrypted);
   }
 
-  decrypt(encryptedText: string): string {
-    const decoded = decodeURIComponent(encryptedText);
-    const decipher = crypto.createDecipheriv(
-      this.algorithm,
-      this.secretKey,
-      this.iv,
-    );
+  decrypt(encryptedText: string): DecryptionResults {
+    try {
+      const decoded = decodeURIComponent(encryptedText);
+      const decipher = crypto.createDecipheriv(
+        this.algorithm,
+        this.secretKey,
+        this.iv,
+      );
 
-    let decrypted = decipher.update(decoded, 'base64', 'utf8');
-    decrypted += decipher.final('utf8');
+      let decrypted = decipher.update(decoded, 'base64', 'utf8');
+      decrypted += decipher.final('utf8');
 
-    return decrypted;
+      return { success: true, data: decrypted };
+    } catch (err: any) {
+      logger.error(err.message);
+      return { success: false };
+    }
+
+    // return decrypted;
   }
 }
