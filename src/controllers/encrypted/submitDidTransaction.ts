@@ -12,12 +12,20 @@ import * as Kilt from '@kiltprotocol/sdk-js';
 import type { SignerInterface, KiltAddress } from '@kiltprotocol/types';
 import { generateAccounts } from './generateAccount';
 import { generateDid } from './generateDid';
-import { DidTransactionHandler } from '../../services/didTransaction';
+import {
+  DidTransactionHandler,
+  TransactionResponse,
+} from '../../services/didTransaction';
 import {
   DecryptionResults,
   EncryptionHandler,
 } from '../../services/EncryptionHandler';
-import { DecryptionError, ValidationError } from '../../config/errors';
+import {
+  DecryptionError,
+  DidCreationError,
+  ValidationError,
+} from '../../config/errors';
+import { faucetAccount } from '../../config/faucet';
 
 export async function submitDidTransaction(args: ControllerArgs) {
   const res: ServerResponse = {
@@ -51,27 +59,30 @@ export async function submitDidTransaction(args: ControllerArgs) {
       );
     }
 
-    // const [submitter] = (await Kilt.getSignersForKeypair({
-    //   keypair: faucet,
-    //   type: 'Ed25519',
-    // })) as Array<SignerInterface<'Ed25519', KiltAddress>>;
+    const [submitter] = (await Kilt.getSignersForKeypair({
+      keypair: faucetAccount,
+      type: 'Ed25519',
+    })) as Array<SignerInterface<'Ed25519', KiltAddress>>;
 
-    // const balance = await api.query.system.acc ount(.id);
-    // console.log('balance', balance.toHuman());
+    const transactionResponse: TransactionResponse =
+      await DidTransactionHandler({
+        submitter: submitter,
+        txHex: decryptedHex.data!,
+      });
 
-    // let { holderAccount, issuerAccount } = generateAccounts();
+    if (transactionResponse.success === false) {
+      throw new DidCreationError(
+        HTTP_STATUS.BAD_GATEWAY,
+        transactionResponse.error!,
+        MESSAGES.DID_FAILED,
+      );
+    }
 
-    // let holderDid = await generateDid(submitter, holderAccount);
+    res.success = true;
+    res.message = MESSAGES.TRANSACTION_COMPLETED;
+    res.timestamp = Date.now().toString();
 
-    // console.log('Received DID:', holderDid);
-
-    // const hx = holderDid['txHex'];
-    // await DidTransactionHandler({ submitter: submitter, txHex: hx });
-    // console.log('Transaction Data:', txData);
-
-    // console.log("params are ", params)
-
-    throw new Error('lol');
+    response.status(HTTP_STATUS.ACCEPTED).json(res);
     return;
   } catch (err: any) {
     logger.error(err.message);
@@ -90,6 +101,12 @@ export async function submitDidTransaction(args: ControllerArgs) {
       return;
     }
 
+    if (err instanceof DidCreationError) {
+      logger.error(err.errorTxt);
+      res.message = err.message;
+      response.status(err.code).json(res);
+      return;
+    }
     res.message = MESSAGES.ERROR_MESSAGE;
     res.timestamp = Date.now().toString();
     response.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(res);

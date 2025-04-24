@@ -3,6 +3,8 @@ export const MESSAGES = {
   MODE_OF_DEVELOPMENT: 'Application running state: ',
   DENIED_REQUEST: 'Invalid request',
   DECRYPTION_FAILED: 'Provided data is invalid',
+  DID_FAILED: 'DID creation failed',
+  TRANSACTION_COMPLETED: 'Transaction completed',
 };
 
 export const ENCRYPTION_SECRET = {

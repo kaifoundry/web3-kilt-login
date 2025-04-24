@@ -27,3 +27,14 @@ export class ValidationError extends Error {
     this.name = 'ValidationError';
   }
 }
+
+export class DidCreationError extends Error {
+  constructor(
+    public code: number,
+    public errorTxt: string,
+    message: string,
+  ) {
+    super(message);
+    this.name = 'DidCreationError';
+  }
+}
