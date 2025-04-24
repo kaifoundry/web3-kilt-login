@@ -6,6 +6,8 @@ import dotenv from 'dotenv';
 import express from 'express';
 import { MESSAGES } from './config/constants';
 import { encryptionRoutes } from './routes';
+import { swaggerSpec } from './services/swagger';
+import swaggerUi from 'swagger-ui-express';
 
 dotenv.config({
   path: process.env.NODE_ENV === 'production' ? '.env.prod' : '.env.dev',
@@ -25,6 +27,8 @@ expressInstance.get('/', (req: Request, res: Response) => {
 });
 
 // app.use()
+
+// process.env.NODE_ENV != "production" && expressInstance.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 if (process.env.MAINTENANCE == 'false') {
   StartServices()
