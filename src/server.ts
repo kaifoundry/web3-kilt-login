@@ -22,9 +22,6 @@ export const expressInstance = express();
 expressInstance.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 expressInstance.use(bodyParser.json({ limit: '50mb' }));
 
-expressInstance.post('/a', (req: Request, res: Response) => {
-  submitWeb3NameTransaction({ request: req, response: res });
-});
 expressInstance.use('/', encryptionRoutes);
 expressInstance.get('/', (req: Request, res: Response) => {
   res.status(200).json('helllo');
@@ -44,3 +41,7 @@ if (process.env.MAINTENANCE == 'false') {
 }
 
 // app.get("*", missingRoutes);
+
+export const sum = (a: number, b: number): number => {
+  return a + b;
+};

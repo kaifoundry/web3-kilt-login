@@ -91,8 +91,6 @@ export async function submitDidTransaction(args: HttpHandler) {
     serverResponse.data = transactionResponse;
     serverResponse.timestamp = Date.now().toString();
 
-
-
     // encrypt response
     // const encryptedData = new EncryptionHandler({algorithm: ENCRPYTION_ALGORITHM.AES_256, secretKey: ENCRYPTION_SECRET.DATA},).encrypt(JSON.stringify(serverResponse));
 

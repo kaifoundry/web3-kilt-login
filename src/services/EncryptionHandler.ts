@@ -1,6 +1,3 @@
-
-
-
 import crypto from 'crypto';
 import { IV_LENGTH } from '../config/constants';
 import { logger } from '../utils/logger';
@@ -43,7 +40,7 @@ export class EncryptionHandler {
       let encrypted = cipher.update(plainText, 'utf8', 'base64');
       encrypted += cipher.final('base64');
 
-      const authTag = cipher.getAuthTag() ; // Only exists for GCM
+      const authTag = cipher.getAuthTag(); // Only exists for GCM
 
       const payload: EncryptedPayload = {
         iv: iv.toString('base64'),
@@ -51,9 +48,11 @@ export class EncryptionHandler {
         ciphertext: encrypted,
       };
 
-      return encodeURIComponent(Buffer.from(JSON.stringify(payload)).toString('base64'));
+      return encodeURIComponent(
+        Buffer.from(JSON.stringify(payload)).toString('base64'),
+      );
     } catch (error: any) {
-      console.log("errrr ", error)
+      console.log('errrr ', error);
       logger.error('Encryption failed:', error.message);
       return null;
     }
@@ -61,14 +60,21 @@ export class EncryptionHandler {
 
   decrypt(encryptedText: string): DecryptionResults {
     try {
-      const decoded = Buffer.from(decodeURIComponent(encryptedText), 'base64').toString('utf8');
+      const decoded = Buffer.from(
+        decodeURIComponent(encryptedText),
+        'base64',
+      ).toString('utf8');
       const payload: EncryptedPayload = JSON.parse(decoded);
 
       const iv = Buffer.from(payload.iv, 'base64');
       const authTag = Buffer.from(payload.authTag, 'base64');
       const ciphertext = payload.ciphertext;
 
-      const decipher = crypto.createDecipheriv(this.algorithm, this.secretKey, iv) as crypto.DecipherGCM;
+      const decipher = crypto.createDecipheriv(
+        this.algorithm,
+        this.secretKey,
+        iv,
+      ) as crypto.DecipherGCM;
 
       decipher.setAuthTag(authTag);
 
@@ -82,9 +88,6 @@ export class EncryptionHandler {
     }
   }
 }
-
-
-
 
 // import crypto from 'crypto';
 // import { IV_LENGTH } from '../config/constants';

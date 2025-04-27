@@ -10,6 +10,7 @@ import {
   ENCRYPTION_SECRET,
 } from '../../config/constants';
 import { submitDidTransaction } from './didTransaction';
+import { submitWeb3NameTransaction } from './w3nTransaction';
 
 export async function encryptionController(req: Request, res: Response) {
   const urlWithoutSpecialChar: string = req.url.slice(1);
@@ -24,11 +25,15 @@ export async function encryptionController(req: Request, res: Response) {
 
     switch (decryptedEndpoint.data) {
       // match endpoints
-      case ENCRYPTED_ENDPOINTS.TRANSHEX: {
+      case ENCRYPTED_ENDPOINTS.DIDCREATION: {
         submitDidTransaction({ request: req, response: res });
         return;
       }
-      // other endpoints
+
+      case ENCRYPTED_ENDPOINTS.W3NCREATION: {
+        submitWeb3NameTransaction({ request: req, response: res });
+        return;
+      }
       default: {
         res.status(500);
       }
