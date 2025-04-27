@@ -15,10 +15,7 @@ export async function StartServices() {
   }
 
   try {
-    // kiltApi = await kilt.connect(serverUrl);
-    console.log('connected');
-
-    debugConsoles();
+    process.env.NODE_ENV != 'production' && debugConsoles();
     expressInstance.listen(process.env.PORT || 3000, () => {
       console.log(
         `Server is running on http://localhost:${process.env.PORT || 3000}`,

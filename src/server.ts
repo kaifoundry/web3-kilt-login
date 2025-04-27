@@ -41,7 +41,3 @@ if (process.env.MAINTENANCE == 'false') {
 }
 
 // app.get("*", missingRoutes);
-
-export const sum = (a: number, b: number): number => {
-  return a + b;
-};

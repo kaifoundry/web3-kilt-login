@@ -1,5 +1,5 @@
-import { EncryptionHandler, EncryptionArgs, DecryptionResults, EncryptedPayload } from '../../src/services/EncryptionHandler'; // Adjust the import path
-import * as crypto from 'crypto';
+import { EncryptionHandler, EncryptionArgs, DecryptionResults, EncryptedPayload } from '../../src/services/EncryptionHandler';
+
 
 
 describe('EncryptionHandler', () => {
