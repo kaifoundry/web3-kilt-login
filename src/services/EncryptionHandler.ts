@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import * as crypto from 'crypto';
 import { IV_LENGTH } from '../config/constants';
 import { logger } from '../utils/logger';
 
@@ -40,7 +40,7 @@ export class EncryptionHandler {
       let encrypted = cipher.update(plainText, 'utf8', 'base64');
       encrypted += cipher.final('base64');
 
-      const authTag = cipher.getAuthTag(); // Only exists for GCM
+      const authTag = cipher.getAuthTag();
 
       const payload: EncryptedPayload = {
         iv: iv.toString('base64'),
@@ -83,8 +83,8 @@ export class EncryptionHandler {
 
       return { success: true, data: decrypted };
     } catch (error: any) {
-      logger.error('Decryption failed:', error.message);
-      return { success: false };
+      // logger.error('Decryption failed:', error.message);
+      return { success: false, data: undefined };
     }
   }
 }
