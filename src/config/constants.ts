@@ -13,6 +13,7 @@ export const MESSAGES = {
 //   DATA: '12345678901535353550443456789012',
 // }; // for aes-256-cbc
 
+// later need to be placed in .env
 export const ENCRYPTION_SECRET = {
   URL: 'TxmtDd1OsvdPfoP85zyhszNCl4vW8KxZeV1Jt2G9vzk=',
   DATA: 'goMq0TvzUP3vOO2v02UJfHCdaTAOOLCAWXRAQ3Zxpuc=',

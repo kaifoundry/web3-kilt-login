@@ -24,7 +24,7 @@ export class EncryptionHandler {
 
   constructor(args: EncryptionArgs) {
     this.algorithm = args.algorithm;
-    this.secretKey = Buffer.from(args.secretKey, 'base64'); // Assuming base64 key
+    this.secretKey = Buffer.from(args.secretKey, 'base64'); 
   }
 
   encrypt(plainText: string): string | null {

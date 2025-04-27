@@ -11,6 +11,7 @@ import {
 } from '../../config/constants';
 import { submitDidTransaction } from './didTransaction';
 import { submitWeb3NameTransaction } from './w3nTransaction';
+import { HTTP_STATUS } from '../../config/responseCodes';
 
 export async function encryptionController(req: Request, res: Response) {
   const urlWithoutSpecialChar: string = req.url.slice(1);
@@ -40,9 +41,16 @@ export async function encryptionController(req: Request, res: Response) {
     }
 
     res.status(200).json('xxo');
-  } catch (err: any) {
-    logger.error(err.message);
+  } catch (err: unknown) {
+
+    if (err instanceof Error) {
+      logger.error(err.message);
+    }
+
+    console.log(err)
+
+    res.status(HTTP_STATUS.NOT_IMPLEMENTED).json()
   }
 
-  res.status(200).json('hello');
+  // res.status(200).json('hello');
 }

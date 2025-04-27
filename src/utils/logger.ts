@@ -1,7 +1,12 @@
 import { createLogger, transports, format } from 'winston';
 import * as path from 'path';
+import { fileURLToPath } from 'url';
 
-const logFilePath = path.join(__dirname, 'logs', 'app.log');
+// const logFilePath = path.join(__dirname, 'logs', 'app.log');
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
+
+// const logFilePath = path.join(__dirname, 'logs', 'app.log');
 
 export const logger = createLogger({
   level: 'info',
@@ -21,10 +26,10 @@ export const logger = createLogger({
   transports: [
     new transports.Console(),
 
-    new transports.File({
-      filename: logFilePath,
-      level: 'info',
-      format: format.combine(format.timestamp(), format.json()),
-    }),
+    // new transports.File({
+    //   filename: logFilePath,
+    //   level: 'info',
+    //   format: format.combine(format.timestamp(), format.json()),
+    // }),
   ],
 });

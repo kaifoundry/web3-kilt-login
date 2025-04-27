@@ -27,7 +27,7 @@ export async function KiltTransactionHandler(
     throw new Error(MESSAGES.ENV_ERROR);
   }
 
-  let api = await Kilt.connect(serverUrl);
+  const api = await Kilt.connect(serverUrl);
 
   const transactionResponse: TransactionResponse = {
     success: false,
@@ -40,7 +40,7 @@ export async function KiltTransactionHandler(
     );
 
     const txHash = result.txHash;
-    // @ts-ignore
+    // @ts-expect-error
     const blockHash = result.status.toJSON()!.finalized;
 
     if (result.isError && !result.isCompleted) {
