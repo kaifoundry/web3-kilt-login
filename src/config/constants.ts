@@ -5,6 +5,7 @@ export const MESSAGES = {
   DECRYPTION_FAILED: 'Provided data is invalid',
   DID_FAILED: 'DID creation failed',
   TRANSACTION_COMPLETED: 'Transaction completed',
+  ENV_ERROR: 'Not able to access data from .env',
 };
 
 export const ENCRYPTION_SECRET = {

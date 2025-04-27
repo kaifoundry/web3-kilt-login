@@ -23,9 +23,11 @@ import {
 import {
   DecryptionError,
   DidCreationError,
+  KiltTransactionError,
   ValidationError,
 } from '../../config/errors';
 import { faucetAccount } from '../../config/faucet';
+import { TransactionError } from '../../types/transactionErrorType';
 
 export async function submitDidTransaction(args: ControllerArgs) {
   const res: ServerResponse = {
@@ -35,8 +37,6 @@ export async function submitDidTransaction(args: ControllerArgs) {
   const { request, response } = args;
 
   try {
-    // let api = await Kilt.connect('wss://peregrine.kilt.io/');
-
     const { tx } = request.query;
 
     if (!tx) {
@@ -47,17 +47,19 @@ export async function submitDidTransaction(args: ControllerArgs) {
     }
 
     // decrypt tx-hex
-    const decryptedHex: DecryptionResults = new EncryptionHandler({
-      algorithm: ENCRPYTION_ALGORITHM.AES_256,
-      secretKey: ENCRYPTION_SECRET.DATA,
-    }).decrypt(tx.toString());
+    // const decryptedHex: DecryptionResults = new EncryptionHandler({
+    //   algorithm: ENCRPYTION_ALGORITHM.AES_256,
+    //   secretKey: ENCRYPTION_SECRET.DATA,
+    // }).decrypt(tx.toString());
 
-    if (decryptedHex.success === false) {
-      throw new DecryptionError(
-        HTTP_STATUS.BAD_REQUEST,
-        MESSAGES.DECRYPTION_FAILED,
-      );
-    }
+    // if (decryptedHex.success === false) {
+    //   throw new DecryptionError(
+    //     HTTP_STATUS.BAD_REQUEST,
+    //     MESSAGES.DECRYPTION_FAILED,
+    //   );
+    // }
+
+    console.log('tx is ', tx);
 
     const [submitter] = (await Kilt.getSignersForKeypair({
       keypair: faucetAccount,
@@ -67,19 +69,26 @@ export async function submitDidTransaction(args: ControllerArgs) {
     const transactionResponse: TransactionResponse =
       await DidTransactionHandler({
         submitter: submitter,
-        txHex: decryptedHex.data!,
+        txHex: tx.toString(),
       });
 
     if (transactionResponse.success === false) {
-      throw new DidCreationError(
-        HTTP_STATUS.BAD_GATEWAY,
-        transactionResponse.error!,
-        MESSAGES.DID_FAILED,
+
+      if (transactionResponse.error?.identifier === TransactionError.AlreadyExists || transactionResponse.error?.identifier === TransactionError.InvalidSignature) {
+        throw new KiltTransactionError(
+          HTTP_STATUS.BAD_REQUEST,
+          transactionResponse.error!.stack,
+          MESSAGES.DID_FAILED,
+        );
+      }
+
+      throw new Error(
+        transactionResponse.error!.stack,
       );
     }
 
     res.success = true;
-    res.message = MESSAGES.TRANSACTION_COMPLETED;
+    res.data = transactionResponse;
     res.timestamp = Date.now().toString();
 
     response.status(HTTP_STATUS.ACCEPTED).json(res);
@@ -103,10 +112,18 @@ export async function submitDidTransaction(args: ControllerArgs) {
 
     if (err instanceof DidCreationError) {
       logger.error(err.errorTxt);
-      res.message = err.message;
+      res.message = err.errorTxt;
       response.status(err.code).json(res);
       return;
     }
+
+    if (err instanceof KiltTransactionError) {
+      logger.error(err.errorTxt);
+      res.message = err.errorTxt;
+      response.status(err.code).json(res);
+      return;
+    }
+
     res.message = MESSAGES.ERROR_MESSAGE;
     res.timestamp = Date.now().toString();
     response.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(res);

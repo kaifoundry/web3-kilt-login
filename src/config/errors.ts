@@ -38,3 +38,14 @@ export class DidCreationError extends Error {
     this.name = 'DidCreationError';
   }
 }
+
+export class KiltTransactionError extends Error {
+  constructor(
+    public code: number,
+    public errorTxt: string,
+    message: string,
+  ) {
+    super(message);
+    this.name = 'TransactionFailed';
+  }
+}

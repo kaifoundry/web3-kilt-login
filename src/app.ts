@@ -8,8 +8,16 @@ import * as kilt from '@kiltprotocol/sdk-js';
 export async function StartServices() {
   let kiltApi: any;
 
+  const serverUrl: string | undefined = process.env.SERVER_URL;
+
+  if (!serverUrl) {
+    throw new Error(MESSAGES.ENV_ERROR);
+  }
+
   try {
-    // kiltApi = await kilt.connect(process.env.SERVER_URL || '');
+    // kiltApi = await kilt.connect(serverUrl);
+    console.log('connected');
+
     debugConsoles();
     expressInstance.listen(process.env.PORT || 3000, () => {
       console.log(
