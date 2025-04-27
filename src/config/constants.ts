@@ -8,15 +8,26 @@ export const MESSAGES = {
   ENV_ERROR: 'Not able to access data from .env',
 };
 
-export const ENCRYPTION_SECRET = {
-  URL: '12345678901234567890123456789012',
-  DATA: '12345678901535353550443456789012',
-};
+// export const ENCRYPTION_SECRET = {
+//   URL: '12345678901234567890123456789012',
+//   DATA: '12345678901535353550443456789012',
+// }; // for aes-256-cbc
 
-export const IV_LENGTH: number = 16;
+
+
+export const ENCRYPTION_SECRET = {
+
+  URL: 'TxmtDd1OsvdPfoP85zyhszNCl4vW8KxZeV1Jt2G9vzk=', 
+  DATA: 'goMq0TvzUP3vOO2v02UJfHCdaTAOOLCAWXRAQ3Zxpuc=', 
+};
+// export const IV_LENGTH: number = 16; // for - aes-256-cbc
+
+export const IV_LENGTH = 12;
 
 export const ENCRPYTION_ALGORITHM = {
-  AES_256: 'aes-256-cbc',
+  // AES_256: 'aes-256-cbc',
+  AES_256: 'aes-256-gcm',
+
 };
 
 export const ENCRYPTED_ENDPOINTS = {

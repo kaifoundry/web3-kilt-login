@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-export interface ControllerArgs {
+export interface HttpHandler {
   request: Request;
   response: Response;
 }

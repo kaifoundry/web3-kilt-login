@@ -9,7 +9,7 @@ import {
   ENCRYPTED_ENDPOINTS,
   ENCRYPTION_SECRET,
 } from '../../config/constants';
-import { submitDidTransaction } from './submitDidTransaction';
+import { submitDidTransaction } from './didTransaction';
 
 export async function encryptionController(req: Request, res: Response) {
   const urlWithoutSpecialChar: string = req.url.slice(1);

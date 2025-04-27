@@ -2,6 +2,7 @@ export enum TransactionError {
   AlreadyExists,
   InvalidSignature,
   UnknownError,
+  InvalidNonce,
 }
 
 // index: 2,

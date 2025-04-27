@@ -1,1 +1,1 @@
-export { encryptionController as encryption } from './encrypted/encryption.controller';
+export { encryptionController as encryption } from './encrypted/encrypted.controller';

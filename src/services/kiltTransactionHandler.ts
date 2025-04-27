@@ -18,7 +18,7 @@ export interface TransactionResponse {
   };
 }
 
-export async function DidTransactionHandler(
+export async function KiltTransactionHandler(
   transaction: DidTransaction,
 ): Promise<TransactionResponse> {
   const serverUrl: string | undefined = process.env.SERVER_URL;
@@ -56,6 +56,8 @@ export async function DidTransactionHandler(
 
     return transactionResponse;
   } catch (err: any) {
+    console.log('errr is ', err);
+
     if (err?.method) {
       switch (err.method) {
         case 'AlreadyExists': {
@@ -70,6 +72,15 @@ export async function DidTransactionHandler(
         case 'InvalidSignature': {
           transactionResponse.error = {
             identifier: TransactionError.InvalidSignature,
+            stack: err?.docs?.[0] || 'No stack trace available',
+          };
+
+          return transactionResponse;
+        }
+
+        case 'InvalidNonce': {
+          transactionResponse.error = {
+            identifier: TransactionError.InvalidNonce,
             stack: err?.docs?.[0] || 'No stack trace available',
           };
 
