@@ -21,7 +21,7 @@ expressInstance.use('/', encryptionRoutes);
 
 if (process.env.MAINTENANCE == 'false') {
   const PORT = process.argv[2] || process.env.PORT || 3000;
-  console.log("Port is ", PORT)
+  console.log('Port is ', PORT);
   StartServices(PORT)
     .then
     // handle errrror

@@ -15,7 +15,7 @@ export async function StartServices(port: string | number) {
   }
 
   try {
-    kilt.connect(serverUrl)
+    kilt.connect(serverUrl);
     process.env.NODE_ENV != 'production' && debugConsoles();
     expressInstance.listen(process.env.PORT || 3000, () => {
       const appName = process.env.APP_NAME || 'N/A';
