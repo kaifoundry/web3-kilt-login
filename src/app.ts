@@ -5,7 +5,7 @@ import { debugConsoles } from './utils/debugConsoles';
 import { logger } from './utils/logger';
 import * as kilt from '@kiltprotocol/sdk-js';
 
-export async function StartServices() {
+export async function StartServices(port: string | number) {
   let kiltApi: any;
 
   const serverUrl: string | undefined = process.env.SERVER_URL;
@@ -17,17 +17,26 @@ export async function StartServices() {
   try {
     process.env.NODE_ENV != 'production' && debugConsoles();
     expressInstance.listen(process.env.PORT || 3000, () => {
-      console.log(
-        `Server is running on http://localhost:${process.env.PORT || 3000}`,
-      );
+      const appName = process.env.APP_NAME || 'N/A';
+      const version = process.env.APP_VERSION || 'N/A';
+      // const port = process.env.PORT || 3000;
+      const instance = process.env.NODE_APP_INSTANCE || 0;
+      const mode = process.env.NODE_ENV || 'development';
+      const url = `http://localhost:${port}`;
+      console.log(`
+  ============================================
+    🧠 ${appName} - v${version}
+  --------------------------------------------
+    🔁 Instance     : ${instance}
+    🌐 URL          : ${url}
+    📦 Port         : ${port}
+    🛠️  Mode         : ${mode}
+  ============================================
+  `);
     });
-
-    console.log('hello, connected');
   } catch (err: any) {
     logger.error(err.message);
   } finally {
     // await kiltApi.disconnect();
   }
-
-  console.log('lol');
 }

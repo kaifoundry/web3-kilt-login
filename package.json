@@ -1,5 +1,5 @@
 {
-  "name": "secure-backend",
+  "name": "kilt-core",
   "version": "1.0.0",
   "main": "dist/server.js",
   "type": "module",
@@ -45,8 +45,6 @@
     "crypto": "^1.0.1",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
-    "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1",
     "winston": "^3.17.0"
   },
   "resolutions": {

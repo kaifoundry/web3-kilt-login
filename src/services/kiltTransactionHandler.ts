@@ -56,7 +56,7 @@ export async function KiltTransactionHandler(
 
     return transactionResponse;
   } catch (err: any) {
-    console.log('errr is ', err);
+    // console.log('errr is ', err);
 
     if (err?.method) {
       switch (err.method) {

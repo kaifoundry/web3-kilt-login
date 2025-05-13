@@ -9,12 +9,11 @@ import crypto from 'crypto';
 import { TransactionResponse } from '../services/kiltTransactionHandler';
 
 export async function debugConsoles() {
-
-  const key = crypto.randomBytes(IV_LENGTH)
+  const key = crypto.randomBytes(IV_LENGTH);
 
   const base64Key = key.toString('base64');
 
-  console.log(base64Key + " key");
+  console.log(base64Key + ' key');
 
   const encrypt = new EncryptionHandler({
     algorithm: ENCRPYTION_ALGORITHM.AES_256,
