@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ESNext",
     "moduleResolution": "node",
-    "module": "ESNext",
+    "module": "CommonJS",
     "rootDir": "./",
     "resolveJsonModule": true,
     "allowJs": true,
@@ -10,7 +10,8 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
+    
     "skipLibCheck": true
   },
-  "include": ["./src", "./tests", "tests/jest.config.js"]
+  "include": ["./src"]
 }

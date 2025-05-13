@@ -57,7 +57,7 @@ export async function submitDidTransaction(args: HttpHandler) {
     //   );
     // }
 
-    console.log('tx is ', tx);
+    // console.log('tx is ', tx);
 
     const [submitter] = (await Kilt.getSignersForKeypair({
       keypair: faucetAccount,

@@ -5,7 +5,6 @@ import express from 'express';
 import { MESSAGES } from './config/constants';
 import { encryptionRoutes } from './routes';
 
-
 dotenv.config({
   path: process.env.NODE_ENV === 'production' ? '.env.prod' : '.env.dev',
 });
@@ -20,15 +19,14 @@ expressInstance.use(bodyParser.json({ limit: '50mb' }));
 
 expressInstance.use('/', encryptionRoutes);
 
-
 if (process.env.MAINTENANCE == 'false') {
   const PORT = process.argv[2] || process.env.PORT || 3000;
+  console.log("Port is ", PORT)
   StartServices(PORT)
     .then
     // handle errrror
     ();
 } else {
-  
   // show maintenance thing //
 }
 

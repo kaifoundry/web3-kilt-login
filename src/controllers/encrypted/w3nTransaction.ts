@@ -37,7 +37,7 @@ export async function submitWeb3NameTransaction(args: HttpHandler) {
   try {
     const { tx } = request.query;
 
-    console.log('tx is ', tx);
+    // console.log('tx is ', tx);
 
     if (!tx) {
       throw new ValidationError(
