@@ -39,6 +39,10 @@ export async function KiltTransactionHandler(
       transaction.submitter,
     );
 
+    console.log("transaction results are ", result);
+
+    
+
     const txHash = result.txHash;
     // @ts-expect-error
     const blockHash = result.status.toJSON()!.finalized;

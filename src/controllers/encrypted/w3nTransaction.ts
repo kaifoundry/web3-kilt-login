@@ -32,6 +32,8 @@ export async function submitWeb3NameTransaction(args: HttpHandler) {
     success: false,
   };
 
+
+  const faucAccou = await faucetAccount
   const { request, response } = args;
 
   try {
@@ -47,28 +49,30 @@ export async function submitWeb3NameTransaction(args: HttpHandler) {
     }
 
     // decrypt tx-hex
-    // const decryptedHex: DecryptionResults = new EncryptionHandler({
-    //   algorithm: ENCRPYTION_ALGORITHM.AES_256,
-    //   secretKey: ENCRYPTION_SECRET.DATA,
-    // }).decrypt(tx.toString());
+    const decryptedHex: DecryptionResults = new EncryptionHandler({
+      algorithm: ENCRPYTION_ALGORITHM.AES_256,
+      secretKey: ENCRYPTION_SECRET.DATA,
+    }).decrypt(tx.toString());
 
-    // if (decryptedHex.success === false) {
-    //   throw new DecryptionError(
-    //     HTTP_STATUS.BAD_REQUEST,
-    //     MESSAGES.DECRYPTION_FAILED,
-    //   );
-    // }
+    if (decryptedHex.success === false) {
+      throw new DecryptionError(
+        HTTP_STATUS.BAD_REQUEST,
+        MESSAGES.DECRYPTION_FAILED,
+      );
+    }
 
     const [submitter] = (await Kilt.getSignersForKeypair({
-      keypair: faucetAccount,
+      keypair: faucAccou,
       type: 'Ed25519',
     })) as Array<SignerInterface<'Ed25519', KiltAddress>>;
 
     const transactionResponse: TransactionResponse =
       await KiltTransactionHandler({
         submitter: submitter,
-        txHex: tx.toString(),
+        txHex: decryptedHex.data!,
       });
+
+      // console.log("")
 
     if (transactionResponse.success === false) {
       if (
@@ -96,7 +100,8 @@ export async function submitWeb3NameTransaction(args: HttpHandler) {
     response.status(HTTP_STATUS.ACCEPTED).json(serverResponse);
     return;
   } catch (err: any) {
-    logger.error(err.message);
+    console.log("tesitng ", err);
+    logger.error(err);
 
     serverResponse.timestamp = Date.now().toString();
 

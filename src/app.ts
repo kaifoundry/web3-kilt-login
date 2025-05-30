@@ -1,3 +1,4 @@
+import { cryptoWaitReady } from '@polkadot/util-crypto';
 import { MESSAGES } from './config/constants';
 import { encryptionRoutes } from './routes';
 import { expressInstance } from './server';
@@ -15,6 +16,7 @@ export async function StartServices(port: string | number) {
   }
 
   try {
+    // await cryptoWaitReady()
     kilt.connect(serverUrl);
     process.env.NODE_ENV != 'production' && debugConsoles();
     expressInstance.listen(port, () => {

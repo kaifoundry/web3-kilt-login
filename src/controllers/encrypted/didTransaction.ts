@@ -26,23 +26,43 @@ import {
 } from '../../config/errors';
 import { faucetAccount } from '../../config/faucet';
 import { TransactionError } from '../../types/transactionErrorType';
+import { error } from 'console';
 
 export async function submitDidTransaction(args: HttpHandler) {
   const serverResponse: ServerResponse = {
     success: false,
   };
 
+  const faucetAcc =  faucetAccount
+
   const { request, response } = args;
 
   try {
     const { tx } = request.query;
 
-    if (!tx) {
+        if (!tx) {
       throw new ValidationError(
         HTTP_STATUS.BAD_REQUEST,
         MESSAGES.DECRYPTION_FAILED,
       );
     }
+
+    // decrypt tx
+        const decryptedTX: DecryptionResults = new EncryptionHandler({
+      algorithm: ENCRPYTION_ALGORITHM.AES_256,
+      secretKey: ENCRYPTION_SECRET.DATA,
+    }).decrypt(tx.toString());
+
+    if (!decryptedTX.success) {
+            throw new ValidationError(
+        HTTP_STATUS.BAD_REQUEST,
+        MESSAGES.DECRYPTION_FAILED,
+      );
+    }
+
+    console.log("decrypted tx ", decryptedTX.data);
+
+
 
     // decrypt tx-hex
     // const decryptedHex: DecryptionResults = new EncryptionHandler({
@@ -60,15 +80,19 @@ export async function submitDidTransaction(args: HttpHandler) {
     // console.log('tx is ', tx);
 
     const [submitter] = (await Kilt.getSignersForKeypair({
-      keypair: faucetAccount,
+      keypair: faucetAcc,
       type: 'Ed25519',
     })) as Array<SignerInterface<'Ed25519', KiltAddress>>;
 
     const transactionResponse: TransactionResponse =
       await KiltTransactionHandler({
         submitter: submitter,
-        txHex: tx.toString(),
+        // txHex: tx.toString(),
+        txHex: decryptedTX.data!,
+
       });
+
+      console.log("transaction response i ", transactionResponse);
 
     if (transactionResponse.success === false) {
       if (
@@ -83,7 +107,8 @@ export async function submitDidTransaction(args: HttpHandler) {
           MESSAGES.DID_FAILED,
         );
       }
-
+      
+      console.log("res", );
       throw new Error(transactionResponse.error!.stack);
     }
 
@@ -97,7 +122,7 @@ export async function submitDidTransaction(args: HttpHandler) {
     response.status(HTTP_STATUS.ACCEPTED).json(serverResponse);
     return;
   } catch (err: any) {
-    logger.error(err.message);
+    logger.error(err);
 
     serverResponse.timestamp = Date.now().toString();
 

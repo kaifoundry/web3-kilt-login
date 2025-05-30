@@ -1,7 +1,7 @@
 set -e
 
 BASE_PORT=4000
-INSTANCES=10
+INSTANCES=1
 
 for ((i=0; i<$INSTANCES; i++)); do
   PORT=$((BASE_PORT + i))
