@@ -1,6 +1,6 @@
 import * as Kilt from '@kiltprotocol/sdk-js';
 import type { SignerInterface, KiltAddress } from '@kiltprotocol/types';
-import { Keyring } from '@polkadot/api'
+import { Keyring } from '@polkadot/api';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 export const faucetAccount = {
   publicKey: new Uint8Array([
@@ -13,8 +13,6 @@ export const faucetAccount = {
   ]),
 };
 
-
-
 // const configAccount = async () => {
 //   await cryptoWaitReady()
 // const faucetMnemonic =
@@ -25,9 +23,8 @@ export const faucetAccount = {
 //   return faucet
 // }
 
-
 // export const  faucetAccount = configAccount().then(x => {
 //   // console.log('x', x);
 //   return x;
 // });
-  // console.log("fauet is ", faucet);
+// console.log("fauet is ", faucet);

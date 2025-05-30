@@ -32,8 +32,7 @@ export async function submitWeb3NameTransaction(args: HttpHandler) {
     success: false,
   };
 
-
-  const faucAccou = await faucetAccount
+  const faucAccou = await faucetAccount;
   const { request, response } = args;
 
   try {
@@ -72,7 +71,7 @@ export async function submitWeb3NameTransaction(args: HttpHandler) {
         txHex: decryptedHex.data!,
       });
 
-      // console.log("")
+    // console.log("")
 
     if (transactionResponse.success === false) {
       if (
@@ -100,7 +99,7 @@ export async function submitWeb3NameTransaction(args: HttpHandler) {
     response.status(HTTP_STATUS.ACCEPTED).json(serverResponse);
     return;
   } catch (err: any) {
-    console.log("tesitng ", err);
+    console.log('tesitng ', err);
     logger.error(err);
 
     serverResponse.timestamp = Date.now().toString();

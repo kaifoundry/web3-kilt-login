@@ -33,14 +33,14 @@ export async function submitDidTransaction(args: HttpHandler) {
     success: false,
   };
 
-  const faucetAcc =  faucetAccount
+  const faucetAcc = faucetAccount;
 
   const { request, response } = args;
 
   try {
     const { tx } = request.query;
 
-        if (!tx) {
+    if (!tx) {
       throw new ValidationError(
         HTTP_STATUS.BAD_REQUEST,
         MESSAGES.DECRYPTION_FAILED,
@@ -48,21 +48,19 @@ export async function submitDidTransaction(args: HttpHandler) {
     }
 
     // decrypt tx
-        const decryptedTX: DecryptionResults = new EncryptionHandler({
+    const decryptedTX: DecryptionResults = new EncryptionHandler({
       algorithm: ENCRPYTION_ALGORITHM.AES_256,
       secretKey: ENCRYPTION_SECRET.DATA,
     }).decrypt(tx.toString());
 
     if (!decryptedTX.success) {
-            throw new ValidationError(
+      throw new ValidationError(
         HTTP_STATUS.BAD_REQUEST,
         MESSAGES.DECRYPTION_FAILED,
       );
     }
 
-    console.log("decrypted tx ", decryptedTX.data);
-
-
+    console.log('decrypted tx ', decryptedTX.data);
 
     // decrypt tx-hex
     // const decryptedHex: DecryptionResults = new EncryptionHandler({
@@ -89,10 +87,9 @@ export async function submitDidTransaction(args: HttpHandler) {
         submitter: submitter,
         // txHex: tx.toString(),
         txHex: decryptedTX.data!,
-
       });
 
-      console.log("transaction response i ", transactionResponse);
+    console.log('transaction response i ', transactionResponse);
 
     if (transactionResponse.success === false) {
       if (
@@ -107,8 +104,8 @@ export async function submitDidTransaction(args: HttpHandler) {
           MESSAGES.DID_FAILED,
         );
       }
-      
-      console.log("res", );
+
+      console.log('res');
       throw new Error(transactionResponse.error!.stack);
     }
 
